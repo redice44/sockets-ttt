@@ -3,21 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <title>Socket Tick-Tack-Toe</title>
-  <link rel="stylesheet" href='style.css' />
+  <style>
+  #game {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .row {
+    display: flex;
+  }
+
+  .cell {
+    height: 100px;
+    width: 100px;
+    border: 1px solid black;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+  }
+  </style>
 </head>
 <body>
 
-<div>
+<div id='container'>
+  <div id='game'>
+    <div class="row">
+      <div class="cell" data-cell='0'></div>
+      <div class="cell" data-cell='1'></div>
+      <div class="cell" data-cell='2'></div>
+    </div>
+    <div class="row">
+      <div class="cell" data-cell='3'></div>
+      <div class="cell" data-cell='4'></div>
+      <div class="cell" data-cell='5'></div>
+    </div>
+    <div class="row">
+      <div class="cell" data-cell='6'></div>
+      <div class="cell" data-cell='7'></div>
+      <div class="cell" data-cell='8'></div>
+    </div>
+  </div>
 </div>
-
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-var socket = io.connect();
-socket.on('news', function (data) {
-  console.log(data);
-  socket.emit('my-other-event', { data: 'sup' });
-});
+  var socket = io.connect();
+  var grid = [null, null, null, null, null, null, null, null, null];
+  var cells = document.querySelectorAll('.cell');
+  for (var cell of cells) {
+    cell.addEventListener('click', (e) => {
+      var index = e.currentTarget.dataset.cell;
+
+      if (!grid[index]) {
+        socket.emit('move', { index: index });
+      }
+
+    });
+  }
+
+  socket.on('update', (data) => {
+    console.log(data);
+    grid = data.grid;
+    for (let i = 0; i < cells.length; i++) {
+      cells[i].innerText = grid[i];
+    }
+  });
+
+  function updateGrid() {
+
+  }
 </script>
 </body>
 </html>

@@ -1,0 +1,22 @@
+html
+  head
+    title Socket Tick-Tack-Toe
+    link(rel='stylesheet', href='/css/style.css')
+  body
+    div#container
+      div#game(data-player=player, data-game-id=gameId)
+        div.row
+          div.cell(data-cell='0')
+          div.cell(data-cell='1')
+          div.cell(data-cell='2')
+        div.row
+          div.cell(data-cell='3')
+          div.cell(data-cell='4')
+          div.cell(data-cell='5')
+        div.row
+          div.cell(data-cell='6')
+          div.cell(data-cell='7')
+          div.cell(data-cell='8')
+    script(src='/socket.io/socket.io.js')
+    script(src='/js/ttt.js')
+

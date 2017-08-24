@@ -7,17 +7,39 @@ const path = require('path');
 
 const appPort = process.env.PORT || 4444;
 
-app.get('/', (req, res) => {
-  return res.sendFile(__dirname + '/index.html');
+app.set('view engine', 'pug');
+app.set('views', './server/views')
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
+// app.get('/', (req, res) => {
+//   return res.render('game');
+// });
+
+app.get('/:gameId/:player', (req, res) => {
+  let player = req.params.player === 'one' ? 'O' : 'X';
+
+  return res.render('game', { player: player, gameId: req.params.gameId });
 });
+
+let games = {};
+let players = {};
 
 io.on('connection', (socket) => {
   console.log('New connection');
 
-  socket.emit('news', { data: 'Hello World' });
+  socket.on('load', (data) => {
+    if (!games[data.gameId]) {
+      games[data.gameId] = [null, null, null, null, null, null, null, null, null];
+      players[data.gameId] = true;
+    }
+    socket.emit('update', { gameId: data.gameId, game: games[data.gameId], player: players[data.gameId] ? 'O' : 'X' });
+  });
 
-  socket.on('my-other-event', (data) => {
-    console.log(data);
+  socket.on('move', (data) => {
+    console.log(`Move: ${data.gameId} - ${data.index}`);
+    games[data.gameId][data.index] = players[data.gameId] ? 'O' : 'X';
+    players[data.gameId] = !players[data.gameId];
+    io.emit('update', { gameId: data.gameId, game: games[data.gameId], player: players[data.gameId] ? 'O' : 'X' });
   });
 
   socket.on('disconnect', () => {
@@ -28,24 +50,3 @@ io.on('connection', (socket) => {
 server.listen(appPort, () => {
   console.log(`Server listening on ${appPort}.`);
 });
-
-
-// var app = require('express')();
-// var http = require('http').Server(app);
-// var io = require('socket.io')(http);
-
-// app.get('/', function(req, res){
-//   res.sendFile(__dirname + '/index.html');
-// });
-
-// io.on('connection', function(socket){
-//   console.log('a user connected');
-
-//   socket.on('disconnect', () => {
-
-//   })
-// });
-
-// http.listen(3000, function(){
-//   console.log('listening on *:3000');
-// });

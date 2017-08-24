@@ -20,6 +20,7 @@
   "homepage": "https://github.com/redice44/sockets-ttt#readme",
   "dependencies": {
     "express": "4.15.4",
+    "pug": "2.0.0-rc.3",
     "socket.io": "2.0.3"
   }
 }
