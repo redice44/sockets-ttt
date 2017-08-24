@@ -1,0 +1,25 @@
+{
+  "name": "sockets-ttt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redice44/sockets-ttt.git"
+  },
+  "keywords": [],
+  "author": "Matt Thomson <red.cataclysm@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/redice44/sockets-ttt/issues"
+  },
+  "homepage": "https://github.com/redice44/sockets-ttt#readme",
+  "dependencies": {
+    "express": "4.15.4",
+    "socket.io": "2.0.3"
+  }
+}
